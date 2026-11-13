@@ -1,0 +1,644 @@
+/* WAAD Design Studio — holding page
+   Layout is drawn from the 1440 x 1024 design: 1rem = 16px at that width. */
+
+:root{
+  --burgundy:#4B242C;
+  --burgundy-ink:#ECD3CB;
+  --burgundy-logo:#B38681;
+
+  --sage:#96957B;
+  --sage-ink:#464826;
+
+  --teal:#05252D;
+  --teal-ink:#E8D4C4;
+  --teal-logo:#26666B;
+
+  --cream:#E8D5C5;
+  --olive:#464826;
+
+  --fade:1100ms;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+  font-size:clamp(11px, 1.1111vw, 18px);   /* 16px at a 1440 viewport */
+  -webkit-text-size-adjust:100%;
+}
+
+html,body{height:100%}
+
+body{
+  margin:0;
+  background:var(--burgundy);
+  color:var(--cream);
+  overflow:hidden;
+  font-family:Georgia,"Times New Roman",serif;  /* only ever used by fallback text */
+}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* ---------- stage + slides ---------- */
+
+.stage{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity var(--fade) ease, visibility 0s linear var(--fade);
+}
+
+.slide.is-active{
+  opacity:1;
+  visibility:visible;
+  transition:opacity var(--fade) ease, visibility 0s;
+}
+
+.slide--brand[data-theme="burgundy"]{background:var(--burgundy);color:var(--burgundy-ink)}
+.slide--brand[data-theme="sage"]{background:var(--sage);color:var(--sage-ink)}
+.slide--brand[data-theme="teal"]{background:var(--teal);color:var(--teal-ink)}
+
+/* ---------- monogram ---------- */
+
+.brand{
+  position:absolute;
+  left:50%;
+  top:45%;                       /* lockup centre sits at 45% of the height */
+  transform:translate(-50%,-50%);
+}
+
+.lockup{
+  height:min(21.875rem, 34.2vh);
+  aspect-ratio:187.6 / 350;
+  background-color:currentColor;
+  -webkit-mask:url("../assets/svg/logo-lockup.svg") no-repeat center / contain;
+          mask:url("../assets/svg/logo-lockup.svg") no-repeat center / contain;
+}
+
+.slide--brand[data-theme="burgundy"] .lockup{background-color:var(--burgundy-logo)}
+.slide--brand[data-theme="sage"] .lockup{background-color:var(--sage-ink)}
+.slide--brand[data-theme="teal"] .lockup{background-color:var(--teal-logo)}
+
+/* ---------- tagline + contact pill ---------- */
+
+.corner{
+  position:absolute;
+  right:3.1rem;
+  bottom:2.625rem;
+  width:15.775rem;
+  height:9.8125rem;
+}
+
+.corner__rule{
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:1px;
+  background:currentColor;
+  opacity:.5;
+}
+
+.tagline{
+  position:absolute;
+  left:1.9375rem;
+  top:1rem;
+  width:13.8375rem;
+  aspect-ratio:221.4 / 58.1;
+  background-color:currentColor;
+  -webkit-mask:url("../assets/svg/tagline.svg") no-repeat left top / contain;
+          mask:url("../assets/svg/tagline.svg") no-repeat left top / contain;
+}
+
+.pill{
+  position:absolute;
+  left:1.6875rem;
+  top:6.5rem;
+  width:9.219rem;
+  height:2.531rem;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid currentColor;
+  border-radius:999px;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  cursor:pointer;
+  transition:background-color 400ms ease, color 400ms ease;
+}
+
+.pill__label{
+  width:5.925rem;
+  aspect-ratio:94.8 / 10.6;
+  background-color:currentColor;
+  -webkit-mask:url("../assets/svg/contact-us.svg") no-repeat center / contain;
+          mask:url("../assets/svg/contact-us.svg") no-repeat center / contain;
+}
+
+.slide--brand[data-theme="burgundy"] .pill:hover{background:var(--burgundy-ink);color:var(--burgundy)}
+.slide--brand[data-theme="sage"] .pill:hover{background:var(--sage-ink);color:var(--sage)}
+.slide--brand[data-theme="teal"] .pill:hover{background:var(--teal-ink);color:var(--teal)}
+
+/* ---------- photography ---------- */
+
+.shot{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.veil{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,0) 60%,
+    rgba(0,0,0,.06) 70%,
+    rgba(0,0,0,.22) 80%,
+    rgba(0,0,0,.48) 90%,
+    rgba(0,0,0,.75) 100%);
+}
+
+/* ---------- marquee ---------- */
+
+.marquee{
+  position:absolute;
+  left:0;right:0;
+  bottom:3.05rem;
+  height:3.075rem;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.marquee__track{
+  position:absolute;
+  top:0;left:0;
+  height:100%;
+  width:200%;
+  background:url("../assets/img/marquee-unit.png") repeat-x left center;
+  background-size:auto 100%;
+  animation:drift 6s linear infinite;
+}
+
+@keyframes drift{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-34.65rem,0,0)}   /* exactly one repeat */
+}
+
+/* ---------- arrows ---------- */
+
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:3.5rem;
+  height:3.5rem;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  color:#fff;
+  opacity:.92;
+  transition:opacity 300ms ease;
+}
+
+.arrow:hover{opacity:1}
+.arrow--prev{left:.4rem}
+.arrow--next{right:.4rem}
+
+.arrow svg{
+  width:.9375rem;
+  height:1.5625rem;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:square;
+}
+
+/* ---------- popup ---------- */
+
+.modal{position:fixed;inset:0;z-index:20}
+.modal[hidden]{display:none}
+
+.modal__scrim{
+  position:absolute;
+  inset:0;
+  background:rgba(18,16,15,.62);
+  -webkit-backdrop-filter:blur(2px);
+          backdrop-filter:blur(2px);
+  opacity:0;
+  transition:opacity 420ms ease;
+}
+
+.modal__inner{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+}
+
+.card{
+  position:relative;
+  height:min(35.9375rem, 84vh);
+  aspect-ratio:308 / 575;
+  border-radius:999px;
+  background:var(--cream);
+  color:var(--olive);
+  box-shadow:0 1.5rem 4rem rgba(0,0,0,.38);
+  opacity:0;
+  transform:translateY(1.25rem) scale(.985);
+  transition:opacity 480ms ease, transform 620ms cubic-bezier(.22,.8,.3,1);
+}
+
+.modal.is-open .modal__scrim{opacity:1}
+.modal.is-open .card{opacity:1;transform:none}
+
+.card__comma{
+  position:absolute;
+  left:40.91%;
+  top:6.96%;
+  width:18.18%;
+  height:auto;
+}
+
+.card__head{
+  position:absolute;
+  left:48.7%;
+  top:27.13%;
+  transform:translateX(-50%);
+  width:76.1%;
+  aspect-ratio:234.5 / 45.1;
+  background-color:currentColor;
+  -webkit-mask:url("../assets/svg/popup-headline.svg") no-repeat center / contain;
+          mask:url("../assets/svg/popup-headline.svg") no-repeat center / contain;
+}
+
+.card__rule{
+  position:absolute;
+  left:50%;
+  top:42.43%;
+  transform:translateX(-50%);
+  width:79.2%;
+  height:1px;
+  background:currentColor;
+  opacity:.55;
+}
+
+.card__rule--2{top:68.5%}
+
+.card__reach{
+  position:absolute;
+  left:50%;
+  top:50.09%;
+  transform:translateX(-50%);
+  width:35.1%;
+  height:auto;
+}
+
+.card__icons{
+  position:absolute;
+  left:0;right:0;
+  top:56.17%;
+  height:4.35%;
+}
+
+.ico{
+  position:absolute;
+  top:0;
+  height:100%;
+  color:var(--olive);
+  background-color:currentColor;
+  transition:opacity 300ms ease;
+  opacity:.95;
+}
+
+.ico:hover{opacity:.65}
+
+.ico--mail{
+  left:37.34%;
+  width:10.13%;
+  -webkit-mask:url("../assets/svg/mail.svg") no-repeat center / contain;
+          mask:url("../assets/svg/mail.svg") no-repeat center / contain;
+}
+
+.ico--insta{
+  left:55.19%;
+  width:7.86%;
+  -webkit-mask:url("../assets/svg/instagram.svg") no-repeat center / contain;
+          mask:url("../assets/svg/instagram.svg") no-repeat center / contain;
+}
+
+.card__featured{
+  position:absolute;
+  left:50%;
+  top:75.3%;
+  transform:translateX(-50%);
+  width:29.87%;
+  aspect-ratio:92 / 13;
+  background-color:currentColor;
+  -webkit-mask:url("../assets/svg/featured-in.svg") no-repeat center / contain;
+          mask:url("../assets/svg/featured-in.svg") no-repeat center / contain;
+}
+
+.card__logos{
+  position:absolute;
+  left:0;right:0;
+  top:85.1%;
+  height:0;
+}
+
+.pub{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  display:block;
+  background-color:currentColor;
+  opacity:.51;
+}
+
+.pub--ltd{
+  left:27.8%;
+  width:11.43%;
+  aspect-ratio:35.2 / 24.6;
+  -webkit-mask:url("../assets/svg/love-that-design.svg") no-repeat center / contain;
+          mask:url("../assets/svg/love-that-design.svg") no-repeat center / contain;
+}
+
+.pub--id{
+  left:47.8%;
+  width:8.51%;
+  aspect-ratio:26.2 / 22.9;
+  -webkit-mask:url("../assets/svg/id.svg") no-repeat center / contain;
+          mask:url("../assets/svg/id.svg") no-repeat center / contain;
+}
+
+.pub--prime{
+  left:69.3%;
+  width:18.51%;
+  aspect-ratio:57 / 12.9;
+  -webkit-mask:url("../assets/svg/prime.svg") no-repeat center / contain;
+          mask:url("../assets/svg/prime.svg") no-repeat center / contain;
+}
+
+.close{
+  position:absolute;
+  left:calc(50% + (min(35.9375rem, 84vh) * 308 / 575) / 2 + 2.375rem);
+  top:calc(50% - min(35.9375rem, 84vh) / 2);
+  width:1.484rem;
+  height:1.484rem;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font:inherit;
+  cursor:pointer;
+  opacity:0;
+  transition:opacity 480ms ease;
+}
+
+.modal.is-open .close{opacity:.95}
+.close:hover{opacity:1}
+
+.close svg{
+  width:100%;
+  height:100%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.4;
+  stroke-linecap:round;
+}
+
+/* ---------- phones and small tablets ---------- */
+
+@media (max-width:760px) and (min-aspect-ratio:4/5){
+  html{font-size:16px}
+
+  .brand{top:42%}
+  .lockup{height:min(30vh, 17rem)}
+
+  .corner{
+    right:auto;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:12vh;
+    width:auto;
+    height:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.5rem;
+  }
+
+  .corner__rule{display:none}
+
+  .tagline{
+    position:static;
+    width:min(62vw, 18rem);
+  }
+
+  .pill{
+    position:static;
+    width:9.219rem;
+    height:2.531rem;
+  }
+
+  .marquee{
+    bottom:4.5vh;
+    height:1.75rem;
+  }
+
+  @keyframes drift{
+    from{transform:translate3d(0,0,0)}
+    to{transform:translate3d(-19.72rem,0,0)}
+  }
+
+  .arrow{width:2.75rem;height:2.75rem}
+  .arrow--prev{left:0}
+  .arrow--next{right:0}
+  .arrow svg{width:.7rem;height:1.2rem}
+
+  .card{height:min(34rem, 76vh)}
+
+  .close{
+    left:auto;
+    right:1.25rem;
+    top:max(1.25rem, calc(50% - min(34rem,76vh)/2 - 3rem));
+    width:1.75rem;
+    height:1.75rem;
+  }
+}
+
+/* short landscape windows */
+@media (max-height:520px) and (min-width:761px){
+  .corner{transform:scale(.82);transform-origin:bottom right}
+  .marquee{bottom:1.6rem}
+}
+
+/* Reduced motion: the scrolling marquee stops, because moving text is what
+   that setting is for. The carousel keeps running on a slower, softer fade. */
+@media (prefers-reduced-motion:reduce){
+  :root{--fade:1600ms}
+  .marquee__track,
+  .mmarquee__track{animation:none}
+  .card{transition:opacity 300ms ease}
+  .card{transform:none}
+}
+
+/* ==========================================================================
+   Mobile design — a separate nine-slide composition supplied by the studio.
+   Geometry comes from the 402 x 872 frames. The scale lives in font-size,
+   so every measurement below is simply the design point value in em:
+   no custom-property arithmetic, which older Safari mishandles.
+   ========================================================================== */
+
+.set{position:absolute;inset:0}
+.set--mobile{display:none}
+
+.mslide .panel{
+  position:absolute;
+  left:50%;
+  top:0;
+  transform:translateX(-50%);
+  width:100%;
+  height:100%;
+}
+
+.mslide[data-theme="burgundy"] .panel{background:#4B232B;color:#B38580}
+.mslide[data-theme="olive"] .panel{background:#464826;color:#95957B}
+.mslide[data-theme="teal"] .panel{background:#05242D;color:#26666B}
+
+.oval{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,calc(-50% - 79.15em));
+  width:241.7em;
+  height:387.7em;
+  border:2em solid currentColor;
+  border-radius:9999px;
+}
+
+.mark{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,calc(-50% + 3.15em));
+  width:147em;
+  height:233.2em;
+  background-color:currentColor;
+  -webkit-mask:url("../assets/svg/monogram.svg") no-repeat center / contain;
+          mask:url("../assets/svg/monogram.svg") no-repeat center / contain;
+}
+
+.oval--photo{border:0;overflow:hidden}
+
+.oval__shot{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.oval__comma{
+  position:absolute;
+  left:50%;
+  top:50%;
+  display:block;
+  height:105em;
+}
+
+.oval__comma--burgundy{width:80em;transform:translate(calc(-50% + 9em),-50%)}
+.oval__comma--olive{width:74em;transform:translate(calc(-50% + 6em),-50%)}
+.oval__comma--teal{width:73em;transform:translate(calc(-50% + 3.5em),-50%)}
+
+.mslide .pill{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,calc(-50% + 184em));
+  width:138.7em;
+  height:44.7em;
+  border:1px solid #EBD3CA;
+  color:#EBD3CA;
+}
+
+.mslide .pill__label{width:94.8em}
+.mslide .pill:hover{background:#EBD3CA;color:#4B232B}
+
+/* the studio's frames carry no running text; it was added afterwards, sized
+   for the phone rather than scaled down from the desktop band */
+.mmarquee{
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  transform:translateY(calc(-50% + 366em));
+  height:17em;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.mmarquee__track{
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  width:200%;
+  background:url("../assets/img/marquee-unit.png") repeat-x left center;
+  background-size:auto 100%;
+  animation:drift-m 8s linear infinite;
+}
+
+@keyframes drift-m{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-191.6em,0,0)}
+}
+
+/* the switch: portrait screens get the mobile composition */
+@media (max-aspect-ratio:4/5){
+  /* 1em = one design point. The first declaration is the fallback for
+     anything that cannot parse min(). */
+  .set--mobile,
+  .modal{font-size:0.248756vw}
+  .set--mobile,
+  .modal{font-size:min(0.248756vw, 0.114679vh)}
+
+  .set--desktop{display:none}
+  .set--mobile{display:block}
+  .arrow{display:none}
+
+  body{background:#4B232B}
+
+  .slide{background:transparent}
+
+  .card{
+    width:308em;
+    height:575em;
+    aspect-ratio:auto;
+    box-shadow:0 30em 70em rgba(0,0,0,.38);
+    transform:translateY(calc(-21em + 20em)) scale(.985);
+  }
+
+  .modal.is-open .card{transform:translateY(-21em)}
+
+  .close{
+    left:auto;
+    right:calc(50% - 175em);
+    top:calc(50% - 296em);
+    width:22em;
+    height:22em;
+  }
+}
+
